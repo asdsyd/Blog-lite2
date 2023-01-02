@@ -1,2 +1,2 @@
-# Blog-lite2
+# Blog-lite
 Current development version of bloglite
