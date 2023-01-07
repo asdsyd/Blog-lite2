@@ -1,22 +1,43 @@
+import os
 from flask import (render_template, url_for, flash,
                    redirect, request, abort, Blueprint)
 from flask_login import current_user, login_required
 from bloglite import db
 from bloglite.models import Post
 from bloglite.posts.forms import PostForm
+from bloglite.main.routes import home
+from werkzeug.utils import secure_filename
 
 posts = Blueprint('posts', __name__)
-
+upload_path = os.path.join('static', 'post_pics')
 @posts.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
     form = PostForm()
-    if form.validate_on_submit():
-        post = Post(title=form.title.data, content=form.content.data, author=current_user)
-        db.session.add(post)
-        db.session.commit()
-        flash('Your post has been created!', 'success')
-        return redirect(url_for('main.home'))
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            if form.image.data != None:
+                file=form.image.data
+                securefilename=secure_filename(file.filename)
+                file.save(os.path.join(upload_path, securefilename))
+
+                post = Post(title=form.title.data,
+                            content=form.content.data,
+                            image=securefilename,
+                            author=current_user)
+                db.session.add(post)
+                db.session.commit()
+                flash('Your post has been created!', 'success')
+                return redirect(url_for('main.home'))
+            else:
+                post = Post(title=form.title.data,
+                            content=form.content.data,
+                            author=current_user)
+                db.session.add(post)
+                db.session.commit()
+                flash('Your post has been created!', 'success')
+                return redirect(url_for('main.home'))
+
     return render_template('create_post.html', title='New Post',
                            form=form, legend='New Post')
 
@@ -37,6 +58,7 @@ def update_post(post_id):
     if form.validate_on_submit():
         post.title = form.title.data
         post.content = form.content.data
+        post.image = form.content.data
         db.session.commit()
         flash('Your post has been updated!', 'success')
         return redirect(url_for('posts.post', post_id=post.id))

@@ -85,15 +85,15 @@ def user_posts(username):
 
 
 @users.route("/reset_password", methods=['GET', 'POST'])
+@login_required
 def reset_request():
-    if current_user.is_authenticated:
-        return redirect(url_for('main.home'))
     form = RequestResetForm()
     if form.validate_on_submit():
-        user = User.query.filter_by(email=form.email.data).first()
-        send_reset_email(user)
-        flash('An email has been sent with instructions to reset your password.')
-        return redirect(url_for('users.login'))
+        user = User.query.filter_by(username=current_user.username).first()
+        user.password = bcrypt.generate_password_hash(form.password.data)
+        db.session.commit()
+        flash('Your Password was successfully updated', 'success')
+        return redirect(url_for('main.home'))
     return render_template('reset_request.html', title='Reset Password',
                            form=form)
 
