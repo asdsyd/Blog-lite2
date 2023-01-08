@@ -1,12 +1,17 @@
 {% extends "layout.html" %}
 {% block content %}
-<article class="media content-section">
+<article class="container">
+    <div class="container mb-2 ml-4">
     <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/' + post.author.image_file) }}">
-    <div class="media-body">
-        <div class="article-metadata">
-            <a class="mr-2" href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
-            <small class="text-muted">{{ post.date_posted.strftime('%Y-%m-%d') }}</small>
-            {% if post.author == current_user %}
+        <div class="row">
+            <div class="col">
+            <a href="{{ url_for('users.user_posts', username=post.author.username) }}">{{ post.author.username }}</a>
+            </div>
+            <div class="col">
+            <small class="text-muted">Posted: {{ post.date_posted.strftime('%Y-%m-%d') }}</small>
+            </div>
+        </div>
+        {% if post.author == current_user %}
                 <div>
                     <a class="btn btn-secondary btn-sm mt-1 mb-1" href="{{ url_for('posts.update_post', post_id=post.id) }}">Update</a>
                         <button type="button" class="btn btn-danger btn-sm m-1" data-toggle="modal" data-target="#deleteModal">Delete</button>
@@ -14,6 +19,7 @@
                 </div>
             {% endif %}
         </div>
+        <div class="container">
         <div class="card" style="width: 28rem;">
             <img class="card-img-top" src="{{ url_for('static', filename='post_pics/' + post.image) }}" alt="Post Image">
             <div class="card-body">

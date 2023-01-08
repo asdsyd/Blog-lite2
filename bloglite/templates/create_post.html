@@ -1,13 +1,13 @@
 {% extends "layout.html" %}
 {% block content %}
-<div class="content-section">
+<div class="container border p-4 border-primary-subtle rounded-2">
     <form method="POST" action="/post/new" enctype="multipart/form-data">
         {{ form.hidden_tag() }}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">{{ new_post }}</legend>
+        <fieldset class="form-group container">
+            <legend class="text-left mt-3 mb-2 text-muted">Your New Post {{ new_post }}</legend>
 
 
-            <div class="form-group">
+            <div class="form-group m-2">
                 {{ form.title.label(class="form-control-label") }}
 
                 {% if form.title.errors %}
@@ -23,7 +23,7 @@
             </div>
 
 
-            <div class="form-group">
+            <div class="form-group m-2">
             {{ form.content.label(class="form-control-label") }}
             {% if form.content.errors %}
                 {{ form.content(class="form-control form-control-lg is-invalid") }}
@@ -36,8 +36,8 @@
                 {{ form.content(class="form-control form-control-lg") }}
             {% endif %}
             </div>
-            <div class="form-group">
-                {{ form.image.label(class="form-control-label") }}
+            <div class="form-group m-2">
+                {{ form.image.label(class="form-control-label m-2") }}
                 {% if form.image.errors %}
                     {{ form.image(class="form-control form-control-lg is-invalid") }}
                     <div class="invalid-feedback">
@@ -50,8 +50,8 @@
                 {% endif %}
             </div>
         </fieldset>
-        <div class="form-group">
-            {{ form.submit(class="btn btn-outline-info") }}
+        <div class="form-group m-2">
+            {{ form.submit(class="btn btn-info m-3") }}
         </div>
     </form>
 </div>
